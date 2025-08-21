@@ -1,0 +1,66 @@
+Top Moisturizers for all skin types... 
+
+db.cosmetics.find({
+  Label: "Moisturizer",
+  Combination: 1,
+  Dry: 1,
+  Normal: 1,
+  Oily: 1,
+  Sensitive: 1
+}).sort({ Price: -1 }).limit(5)
+
+Filter: 
+{
+  "Label": "Moisturizer",
+  "Combination": 1,
+  "Dry": 1,
+  "Normal": 1,
+  "Oily": 1,
+  "Sensitive": 1
+}
+
+Project: 
+{
+  "Brand": 1,
+  "Name": 1,
+  "Price": 1,
+  "_id": 0
+}
+
+Sort: 
+{ "Price": -1 }
+
+
+
+Top Grocery Items by Frequency
+
+db.groceries.aggregate([
+  {
+    $group: {
+      _id: "$itemDescription",
+      count: { $sum: 1 }
+    }
+  },
+  { $sort: { count: -1 } },
+  { $limit: 5 }
+])
+
+"Aggregations" tab
+
+Stage 1: $group
+{
+  _id: "$itemDescription",
+  count: { $sum: 1 }
+}
+Stage 2: $sort
+{
+  count: -1
+}
+Stage 3: $limit
+5
+
+Cosmetics with natural ingredients
+uses a regex... 
+{
+  "Ingredients": /fruit|seed|leaf|extract|algae/i
+}

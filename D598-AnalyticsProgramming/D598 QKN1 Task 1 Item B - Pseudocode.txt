@@ -1,0 +1,52 @@
+// 1. Import the data file into a 'Data frame?'  
+//    Q: what is a data frame?  
+//    Q: is a dataframe like .net DataTable obj or ObservableCollection?  
+DataTable data = ImportCsvToDataTable("path_to_file.csv"); 
+
+// 2. Identify duplicate rows in frame?  
+DataTable duplicateRows = data.AsEnumerable()
+    .GroupBy(row => string.Join("|", row.ItemArray))
+    .Where(g => g.Count() > 1)
+    .SelectMany(g => g);
+
+// 3. Group all IDs by State and calculate floats 
+//    Q: what does data look like? 
+DataTable groupedStats = data.AsEnumerable()
+    .GroupBy(row => row["State"])
+    .Select(g => new {
+        State = g.Key,
+        MeanRevenue = g.Average(r => Convert.ToDouble(r["Revenue"])),
+        MedianRevenue = Median(g.Select(r => Convert.ToDouble(r["Revenue"]))),
+        MinRevenue = g.Min(r => Convert.ToDouble(r["Revenue"])),
+        MaxRevenue = g.Max(r => Convert.ToDouble(r["Revenue"])),
+        // Q: Repeat for other numeric?  
+    }).ToList();
+
+// 4. Convert groupedStats to new DataTable
+DataTable statsByState = ConvertToDataTable(groupedStats);
+
+// 5. Filter businesses with negative debt-to-equity ratios
+DataTable negativeDebtToEquity = data.AsEnumerable()
+    .Where(r => Convert.ToDouble(r["DebtEquityRatio"]) < 0)
+    .CopyToDataTable();
+
+// 6. Create a new DataTable with debt-to-income ratio
+DataTable debtToIncome = data.Clone();  
+debtToIncome.Columns.Add("DebtToIncome", typeof(double));
+
+// 7. Populate debtToIncome obj
+foreach (DataRow row in data.Rows) {
+    double longTermDebt = Convert.ToDouble(row["LongTermDebt"]);
+    double revenue = Convert.ToDouble(row["Revenue"]);
+    double dti = revenue != 0 ? longTermDebt / revenue : 0;
+    DataRow newRow = debtToIncome.NewRow();
+    newRow.ItemArray = row.ItemArray;
+    newRow["DebtToIncome"] = dti;
+    debtToIncome.Rows.Add(newRow);
+}
+
+// 7. Concatenate the debt-to-income ratio DataTable with the original one
+DataTable finalResult = data.Copy() + debtToIncome.Copy();
+
+// 8. Do something with output
+return finalResult;

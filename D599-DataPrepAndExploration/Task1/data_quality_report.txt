@@ -1,0 +1,23 @@
+DATA QUALITY REPORT: Employee Turnover Dataset.csv
+============================================================
+
+DUPLICATES
+  Total duplicate rows       : 99
+  Duplicate EmployeeNumbers  : 99
+  First 5 duplicate rows index numbers:
+    10100, 10101, 10102, 10103, 10104
+
+MISSING VALUES
+  NumCompaniesPreviouslyWorked  : 665
+  AnnualProfessionalDevHrs      : 1969
+  TextMessageOptIn              : 2266
+
+INCONSISTENT CATEGORICAL ENTRIES
+  PaycheckMethod                : ['Direct Deposit', 'Mail_Check', 'MailedCheck']
+
+FORMATTING ISSUES
+  Embedded currency symbols in: ['HourlyRate ']
+
+NUMERIC OUTLIERS (IQR rule)
+  AnnualSalary                  : 544 outliers
+  DrivingCommuterDistance       : 245 outliers

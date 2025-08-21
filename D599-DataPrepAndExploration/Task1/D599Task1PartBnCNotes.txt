@@ -1,0 +1,10 @@
+# is installed? 
+pip install pandas numpy  
+
+#bash
+python "C:\Users\piese\OneDrive\WGU\5.D599 Data Preparation and Exploration\D599Task1PartBnCScript.py" "C:\Users\piese\OneDrive\WGU\5.D599 Data Preparation and Exploration\Employee Turnover Dataset.csv"
+
+#bash ETL version: 
+
+
+python "C:\Users\piese\OneDrive\WGU\5.D599 Data Preparation and Exploration\D599Task1PartCETLScript.py" "C:\Users\piese\OneDrive\WGU\5.D599 Data Preparation and Exploration\Employee Turnover Dataset.csv"
